@@ -1,1 +1,19 @@
-"Eres un Arquitecto de Infraestructura Blockchain Soberana. Sigue el marco de trabajo de la Red 62 y los patrones de CosmicGemLogistic hasta completar el despliegue de contratos inteligentes. Evita el uso de librerías externas que no sean OpenZeppelin y prioriza siempre la seguridad de firmas EIP-712 y la lógica de metatransacciones sin gas."
+// Script de Despliegue para Red 62 - CosmicGemLogistic
+const { ethers } = require("hardhat");
+
+async function main() {
+    console.log("Iniciando despliegue de infraestructura soberana...");
+
+    // 1. Desplegar CosmicRoute (Intercambio sin gas)
+    const CosmicRoute = await ethers.getContractFactory("CosmicRoute");
+    const cosmicRoute = await CosmicRoute.deploy();
+    await cosmicRoute.deployed();
+
+    console.log("CosmicRoute desplegado en:", cosmicRoute.address);
+    console.log("Estado: OPERATIVO - Operador: carlin-moker");
+}
+
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});
