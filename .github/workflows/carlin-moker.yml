@@ -1,29 +1,33 @@
-name: Red 62 - Validacion de Infraestructura
+name: LOSv3 - Ejecucion y Validacion Critica
 
 on:
   push:
-    branches: [ carlin-moker ]
-  pull_request:
-    branches: [ carlin-moker ]
+    branches: [ carlin-maker ]
 
 jobs:
-  validate:
+  LOSv3_Execution:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del Repositorio
-        uses: actions/checkout@v4
-
-      - name: Configurar Node.js
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
 
-      - name: Instalar Dependencias
-        run: npm install
+      - name: Instalacion y Compilacion
+        run: |
+          npm install
+          npx hardhat compile
 
-      - name: Compilacion de Contratos
-        run: npx hardhat compile
+      - name: Testeo de Integridad (LOSv3)
+        run: npx hardhat test --network localhost
 
-      - name: Ejecutar Tests
-        run: npx hardhat test
-      
+      - name: Validacion y Cierre (Vampirio & Shadow)
+        env:
+          SIGNATURE_KEY: ${{ secrets.SIGNATURE_KEY }}
+        run: |
+          # Activacion del Protocolo Vampirio y Shadow Relayer
+          npx hardhat run scripts/v3-operational-sync.js
+          echo "LOSv3: Ecosistema Operativo bajo proteccion."
