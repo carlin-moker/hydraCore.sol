@@ -1,0 +1,5 @@
+{
+  "name": "CosmicGenDevContainer",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "postCreateCommand": "pip install phylot phygem"
+}
